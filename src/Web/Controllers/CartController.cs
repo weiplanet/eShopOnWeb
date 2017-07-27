@@ -29,6 +29,8 @@ namespace Microsoft.eShopWeb.Controllers
             return View(basket);
         }
 
+        // GET: /Cart/AddToCart
+        // TODO: This should be a POST.
         public async Task<IActionResult> AddToCart(CatalogItem productDetails)
         {
             if (productDetails?.Id == null)
@@ -59,6 +61,5 @@ namespace Microsoft.eShopWeb.Controllers
             }
             return basket;
         }
-
     }
 }
