@@ -1,36 +1,22 @@
-﻿using ApplicationCore.Interfaces;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
-using System;
-using System.Linq.Expressions;
-using System.Collections.Generic;
+﻿using Ardalis.Specification;
+using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 
-namespace ApplicationCore.Specifications
+namespace Microsoft.eShopWeb.ApplicationCore.Specifications
 {
-    public class BasketWithItemsSpecification : ISpecification<Basket>
+    public sealed class BasketWithItemsSpecification : Specification<Basket>
     {
-        public BasketWithItemsSpecification(int basketId)
+        public BasketWithItemsSpecification(int basketId) 
         {
-            BasketId = basketId;
-            AddInclude(b => b.Items);
+            Query
+                .Where(b => b.Id == basketId)
+                .Include(b => b.Items);
         }
+
         public BasketWithItemsSpecification(string buyerId)
         {
-            BuyerId = buyerId;
-            AddInclude(b => b.Items);
-        }
-
-        public int? BasketId { get; }
-        public string BuyerId { get; }
-
-        public Expression<Func<Basket, bool>> Criteria => b =>
-            (BasketId.HasValue && b.Id == BasketId.Value)
-            || (BuyerId != null && b.BuyerId == BuyerId);
-
-        public List<Expression<Func<Basket, object>>> Includes { get; } = new List<Expression<Func<Basket, object>>>();
-
-        public void AddInclude(Expression<Func<Basket, object>> includeExpression)
-        {
-            Includes.Add(includeExpression);
+            Query
+                .Where(b => b.BuyerId == buyerId)
+                .Include(b => b.Items);
         }
     }
 }
